@@ -1,0 +1,43 @@
+mysql:
+    host: localhost
+    port: 3306
+    username: root
+    password: 1qaz2wsx
+
+restore:
+  feature:
+    - name:
+  socket: /var/lib/mysql/mysql.sock
+  database:
+    - name: test
+      tables:
+        - name:
+  file: /tmp/
+
+backup:
+  feature:
+    - name:
+  socket: /var/lib/mysql/mysql.sock
+  database:
+    - name: test
+      tables:
+        name:
+         - test1
+    - name: test2
+      tables:
+        name:
+         - test2
+  file: /tmp/
+
+tar:
+  - name: unzip
+    source: /tmp/
+    target: /tmp/
+  - name: zip
+    source: /tmp/
+    target: /tmp/
+
+move:
+  source: /tmp/
+  target: /tmp/
+

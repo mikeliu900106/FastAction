@@ -1,6 +1,4 @@
-package org.example;
-
-import org.example.model.Action;
+package org.example.service;
 
 public interface ActionIStrategy {
     public void pickupFile();
