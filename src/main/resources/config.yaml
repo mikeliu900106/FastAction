@@ -12,7 +12,10 @@ restore:
     - name: test
       tables:
         - name:
-  file: /tmp/
+  file:
+     name:
+       - /tmp/
+
 
 backup:
   feature:
@@ -27,7 +30,10 @@ backup:
       tables:
         name:
          - test2
-  file: /tmp/
+  file:
+    name:
+      - test
+
 
 tar:
   - name: unzip

@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.model.*;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -12,7 +14,9 @@ import org.slf4j.LoggerFactory;
 
 public class RestoreServiceImpl extends AbstractFileHandle implements BackupRestoreService {
     private static Logger logger = LoggerFactory.getLogger(RestoreServiceImpl.class.getName());
-
+    private static final String HOST_PREFIX = "-h ";
+    private static final String PORT_PREFIX = "-P ";
+    private static final String SOCKET_PREFIX = "--socket=";
     public RestoreServiceImpl() {
         //這裡透過建構子抓取properties資料
         this.sourceDir = "source";
@@ -23,101 +27,95 @@ public class RestoreServiceImpl extends AbstractFileHandle implements BackupRest
     }
 
     public Map<String,List<String>> getDatabase() {
-        Restore restore = getRestore();
-        if(restore == null) {
-            logger.info("Config Restore is null");
-            return null;
-        }
-        List<Database> databases = restore.getDatabase();
-        if(databases == null) {
-            logger.info("Config Database is null");
-            return null;
-        }
-        Map<String, List<String>> map = databases.stream()
+        return getRestore().getDatabase().stream()
                 .collect(Collectors.groupingBy(
                         Database::getName,
                         Collectors.flatMapping(
-                                db -> db.getTables().stream().flatMap(t -> t.getName().stream()), // 提取 name 列表中的所有元素
+                                db -> db.getTables().stream()
+                                        .flatMap(t -> t.getName().stream()),
                                 Collectors.toList()
                         )
                 ));
-        return map;
+    }
+
+    @Override
+    public List<String> getFiles() {
+        List<String> yamlFiles = getRestore().getFile();
+        List<String> realFiles = new ArrayList<>();
+        try {
+            if (yamlFiles.isEmpty()) {
+                throw new RuntimeException("No file to restore");
+            }
+        } catch (RuntimeException e) {
+            logger.error("No file to restore");
+            logger.error("", e);
+        }
+        for (int i = 0; i < yamlFiles.size(); i++) {
+            if(isFile(yamlFiles.get(i))) {
+                realFiles.add(yamlFiles.get(i));
+            }else{
+                realFiles.addAll(getAllFiles(yamlFiles.get(i), "restore"));
+            }
+        }
+        return realFiles;
     }
 
     @Override
     public String getUserName() {
-        Mysql mysql = getMysql();
-        if(mysql == null) {
-            logger.info("Config Mysql is null");
-            return null;
-        }
-        String username = mysql.getUsername();
-        return username;
+        return getMysql().getUsername();
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return getMysql().getPassword();
     }
 
     @Override
     public String getHost() {
-        return null;
+        return HOST_PREFIX.concat(getMysql().getHost());
     }
 
     @Override
     public String getPort() {
-        return null;
+        return PORT_PREFIX.concat(getMysql().getPort());
     }
 
     public String getSocket() {
-        Restore restore = getRestore();
-        if(restore == null) {
-            logger.info("Config Restore is null");
-            return null;
-        }
-        String socket = restore.getSocket();
-        if(socket == null) {
-            logger.info("Socket is null");
-            return null;
-        }
-        return socket;
+        return SOCKET_PREFIX.concat(getRestore().getSocket());
     }
 
-    public List<String> getFeature() {
-        Restore restore = getRestore();
-        if(restore == null) {
-            logger.info("Config Restore is null");
-            return null;
+    public String getFeature() {
+        List<String> featureList = getRestore().getFeature().getName();
+        String feature = "  ";
+        if(featureList.isEmpty()) {
+            return "";
         }
-        Feature feature = restore.getFeature();
-        if(feature == null) {
-            logger.info("feature is null");
-            return null;
+        for (int i = 0; i < featureList.size(); i++) {
+            feature = feature.concat(featureList.get(i));
+            feature = feature.concat(" ");
         }
-        return feature.getName();
+        return feature;
+    }
+
+
+    @Override
+    public Queue<Map<String,String>> getSource() {
+
     }
 
     @Override
-    public Queue<String> getSource() {
+    public Queue<Map<String,String>> getTarget() {
         return null;
     }
 
     @Override
-    public Queue<String> getTarget() {
-        return null;
-    }
+    public String checkUpFile(List<String> file) {
 
-    @Override
-    public String CheckUpFile(String file) {
-        return null;
     }
     private Restore getRestore() {
-        Restore restore =(Restore) ConfigService.getInstance().getConfigYmlClass("restore");
-        return restore;
+        return (Restore) ConfigService.getInstance().getConfigYmlClass("restore");
     }
     private Mysql getMysql() {
-        Mysql mysql =(Mysql) ConfigService.getInstance().getConfigYmlClass("mysql");
-        return mysql;
+        return (Mysql) ConfigService.getInstance().getConfigYmlClass("mysql");
     }
 }

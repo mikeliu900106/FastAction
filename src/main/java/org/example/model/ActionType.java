@@ -1,5 +1,10 @@
 package org.example.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
 public enum ActionType {
     BACKUP("備份","A"),
 //    BACKUP_TABLE_CREATE("創造表並且備份表資料","B"),
