@@ -8,10 +8,10 @@ restore:
   feature:
     - name:
   socket: /var/lib/mysql/mysql.sock
-  database:
-    - name: test
-      tables:
-        - name:
+#  database:
+#    - name: test
+#      tables:
+#        - name:
   file:
      name:
        - /tmp/
@@ -21,15 +21,10 @@ backup:
   feature:
     - name:
   socket: /var/lib/mysql/mysql.sock
-  database:
-    - name: test
-      tables:
-        name:
-         - test1
-    - name: test2
-      tables:
-        name:
-         - test2
+  #  database:
+  #    - name: test
+  #      tables:
+  #        - name:
   file:
     name:
       - test

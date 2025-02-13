@@ -5,6 +5,7 @@ import org.example.model.Database;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface BackupRestoreService {
     String getUserName();
@@ -12,7 +13,7 @@ public interface BackupRestoreService {
     String getHost();
     String getPort();
     String getSocket();
-    String getFeature();
-    Map<String,List<String>> getDatabase();
+    Optional<String> getFeature();
+    List<Map<String, Optional<String>>> getDatabaseAndTable();
     List<String> getFiles();
 }

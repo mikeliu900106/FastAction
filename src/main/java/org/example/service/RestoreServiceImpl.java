@@ -3,10 +3,8 @@ package org.example.service;
 import org.example.model.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -14,28 +12,43 @@ import org.slf4j.LoggerFactory;
 
 public class RestoreServiceImpl extends AbstractFileHandle implements BackupRestoreService {
     private static Logger logger = LoggerFactory.getLogger(RestoreServiceImpl.class.getName());
+    private static Queue<Map<String,String>> sourceDir = new ConcurrentLinkedQueue<>();
+    private static Queue<Map<String,String>> targetDir = new ConcurrentLinkedQueue<>();
     private static final String HOST_PREFIX = "-h ";
     private static final String PORT_PREFIX = "-P ";
     private static final String SOCKET_PREFIX = "--socket=";
+    private static final String DATABASE_PREFIX = "--databases ";
+    private static final String TABLE_PREFIX = "--tables ";
+
     public RestoreServiceImpl() {
         //這裡透過建構子抓取properties資料
-        this.sourceDir = "source";
+        this.sourceDir = getSource();
+        this.targetDir = getTarget();
     }
 
     public void pickupFile() {
         System.out.println("Restore");
     }
 
-    public Map<String,List<String>> getDatabase() {
-        return getRestore().getDatabase().stream()
-                .collect(Collectors.groupingBy(
-                        Database::getName,
-                        Collectors.flatMapping(
-                                db -> db.getTables().stream()
-                                        .flatMap(t -> t.getName().stream()),
-                                Collectors.toList()
-                        )
-                ));
+    public List<Map<String,Optional<String>> getDatabaseAndTable() {
+        List<String> files = getFiles();
+        if (files.isEmpty()) {
+            throw new RuntimeException("No file to restore");
+        }
+        return files.stream().map(
+                file -> {
+                    String databaseName = "";
+                    String tableName = "";
+                    String path = file;
+                    String name = file.substring(file.lastIndexOf("/") + 1);
+                    String[] split = name.split("-");
+                    databaseName = split[0];
+                    if(split.length != 2) {
+                        tableName = split[1];
+                    }
+                    return Map.of("path", Optional.of(path), "name",Optional.of(name) ,"databaseName", Optional.of(databaseName), "tableName", Optional.of(tableName));
+                }
+        ).collect(Collectors.toList());
     }
 
     @Override
@@ -84,23 +97,43 @@ public class RestoreServiceImpl extends AbstractFileHandle implements BackupRest
         return SOCKET_PREFIX.concat(getRestore().getSocket());
     }
 
-    public String getFeature() {
+    public Optional<String> getFeature() {
         List<String> featureList = getRestore().getFeature().getName();
-        String feature = "  ";
+        String feature = "";
         if(featureList.isEmpty()) {
-            return "";
+            return Optional.empty();
         }
         for (int i = 0; i < featureList.size(); i++) {
             feature = feature.concat(featureList.get(i));
             feature = feature.concat(" ");
         }
-        return feature;
+        return Optional.of(feature);
     }
 
 
     @Override
     public Queue<Map<String,String>> getSource() {
+        List<Map<String,Optional<String>>> databasesAndTables = getDatabaseAndTable();
+        String userName = getUserName();
+        String password = getPassword();
+        String host = getHost();
+        String port = getPort();
+        String socket = getSocket();
+        String feature = getFeature().orElse(" ");
+        for (int i = 0; i < databasesAndTables.size(); i++) {
+            String path = databasesAndTables.get(i).get("path");
+            String databaseName = databasesAndTables.get(i).get("databaseName");
+            String tableName = databasesAndTables.get(i).get("tableName").is;
+            String name = databasesAndTables.get(i).get("name");
+            String restoreSql = Action.MYSQL_RESTORE.getCommand();
+            restoreSql = restoreSql
+                    .replace("<USER>", userName)
+                    .replace("<PASSWORD>", password)
+                    .replace("<HOST>", host)
+                    .replace("<PORT>", port)
+                    .replace("<SOCKET>", socket)
 
+        }
     }
 
     @Override
