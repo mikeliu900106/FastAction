@@ -3,7 +3,7 @@ package org.example.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.example.model.Config;
-import org.example.model.CongigYaml;
+import org.example.model.ConfigYaml;
 import org.example.util.JarLocationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +39,10 @@ public class ConfigService {
         return config;
     }
 
-    public CongigYaml getConfigYmlClass(String key)  {
+    public ConfigYaml getConfigYmlClass(String key)  {
         Class<?> clazz = config.getClass();
         try {
-            return (CongigYaml) clazz.getField(key).get(config);
+            return (ConfigYaml) clazz.getField(key).get(config);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (NoSuchFieldException e) {

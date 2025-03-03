@@ -1,4 +1,4 @@
 package org.example.model;
 
-public interface CongigYaml {
+public interface ConfigYaml {
 }

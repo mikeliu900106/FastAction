@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tar implements CongigYaml{
+public class Tar implements ConfigYaml {
     private List<Zip> zip = new ArrayList<>();
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Config implements CongigYaml{
+public class Config implements ConfigYaml {
     public Mysql mysql;
     public Restore restore;
     public Backup backup;

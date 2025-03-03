@@ -7,8 +7,6 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractFileHandle implements ActionIStrategy {
-    public abstract Queue<?> getTarget();
-    public abstract Queue<?> getSource();
     protected boolean isFile(String path){
         File file = new File(path);
         return  file.isFile();

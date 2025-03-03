@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Backup implements CongigYaml{
+public class Backup implements ConfigYaml {
     public Feature feacture;
     public String socket = "";
     public List<Database> database = new ArrayList<>();

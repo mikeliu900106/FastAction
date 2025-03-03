@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mysql implements CongigYaml{
+public class Mysql implements ConfigYaml {
     private String host = "localhost";
     private String port = "3306";
     private String username = "root";
-    private String password = "";
+    private String password = "eland1234";
 }

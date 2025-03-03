@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Database implements CongigYaml {
+public class Database implements ConfigYaml {
     private String name = "";
     private List<Table> tables = new ArrayList<>();
 }

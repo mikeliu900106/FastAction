@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Table implements CongigYaml{
+public class Table implements ConfigYaml {
     private List<String> name = new ArrayList<>();
 }

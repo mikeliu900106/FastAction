@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Feature implements CongigYaml{
+public class Feature implements ConfigYaml {
     private List<String> name = new ArrayList<>();
 }
