@@ -3,10 +3,8 @@ package org.example.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AbstractFileHandle implements ActionIStrategy {
+public abstract class AbstractFileHandle implements TaskStrategy {
     protected boolean isFile(String path){
         File file = new File(path);
         return  file.isFile();

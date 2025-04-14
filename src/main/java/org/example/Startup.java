@@ -1,9 +1,7 @@
 package org.example;
 
 import org.example.model.ActionType;
-import org.example.service.ActionIStrategy;
-import org.example.service.RestoreServiceImpl;
-import org.example.util.JarLocationUtil;
+import org.example.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +14,7 @@ public class Startup {
     private static final ExecutorService TASK_EXECUTOR = Executors.newFixedThreadPool(threadCount);
     private static Logger logger = LoggerFactory.getLogger(Startup.class.getName());
 
-    private ActionIStrategy strategy;
+    private TaskStrategy strategy;
     public static void main(String[] args) {
         String allActionType = ActionType.getAllActionType();
         if (args.length == 0) {
@@ -39,7 +37,7 @@ public class Startup {
     private void submitTask() {
         for (int i = 0; i < threadCount; i++) {
             TASK_EXECUTOR.execute(() -> {
-                strategy.pickupFile();
+                this.strategy.execute();
             });
         }
     }
@@ -69,6 +67,15 @@ public class Startup {
 //                break;
             case "H":
                 this.strategy = new RestoreServiceImpl();
+                break;
+            case "O":
+                this.strategy = new TarCServiceImpl();
+                break;
+            case "P":
+                this.strategy = new MoveServiceImpl();
+                break;
+            case "Q":
+                this.strategy = new TarXServiceImpl();
                 break;
 //            case "I":
 //                this.strategy = new multyply();

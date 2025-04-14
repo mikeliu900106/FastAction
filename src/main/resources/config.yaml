@@ -1,44 +1,36 @@
-mysql:
+tasks:
+  - type: move
+    source: /tmp/a/
+    target: /backup/a/
+    targetHost:
+      ip: 192.168.1.100
+      os: Linux
+
+  - type: tar
+    source: /tmp/a/
+    target: /backup/a/
+    mode: extract
+    targetHost:
+      ip: 192.168.1.100
+      os: Linux
+
+  - type: unzip
+    source: /tmp/a.zip
+    target: /tmp/extracted/
+    targetHost:
+      ip: 192.168.1.101
+      os: Windows
+
+  - type: importDatabase
+    engine: mysql
     host: localhost
     port: 3306
-    username: root
+    user: root
     password: 1qaz2wsx
-
-restore:
-  feature:
-    - name:
-  socket: /var/lib/mysql/mysql.sock
-#  database:
-#    - name: test
-#      tables:
-#        - name:
-  file:
-     name:
-       - /tmp/
-
-
-backup:
-  feature:
-    - name:
-  socket: /var/lib/mysql/mysql.sock
-  #  database:
-  #    - name: test
-  #      tables:
-  #        - name:
-  file:
-    name:
-      - test
-
-
-tar:
-  - name: unzip
-    source: /tmp/
-    target: /tmp/
-  - name: zip
-    source: /tmp/
-    target: /tmp/
-
-move:
-  source: /tmp/
-  target: /tmp/
+    database: test
+    table:
+    file: /data/a/data.sql
+    targetHost:
+      ip: 192.168.1.102
+      os: Linux
 

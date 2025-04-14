@@ -33,7 +33,7 @@ public class TarXServiceImpl extends AbstractFileHandle{
     }
 
     @Override
-    public void pickupFile() {
+    public void execute() {
         try {
             logger.info("Start to move: " + commands);
             String command =  commands.poll();
@@ -43,7 +43,7 @@ public class TarXServiceImpl extends AbstractFileHandle{
 
             // 取得執行結果
             int exitCode = process.waitFor();
-            logger.info("Command exit code: " + exitCode);
+            logger.info("org.example.model.command.Command exit code: " + exitCode);
 
         } catch (Exception e) {
             logger.error("move failed");

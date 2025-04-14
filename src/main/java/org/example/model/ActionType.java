@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 
 public enum ActionType {
-    BACKUP("備份","A"),
+    ZIP("壓縮","A"),
 //    BACKUP_TABLE_CREATE("創造表並且備份表資料","B"),
 //    BACKUP_TABLE_NO_CREATE("沒有創造表並且備份表資料","C"),
 //    BACKUP_TABLE_NO_DATA("創造表但是沒有備份表資料","D"),
@@ -15,7 +15,7 @@ public enum ActionType {
 //    BACKUP_TABLE_USE_SCHEMA_TABLE_NO_CREATE("使用資料庫沒有創造表也沒有備份表資料","F"),
 //    BACKUP_TABLE_USE_SCHEMA_NO_DATA("使用資料庫創造表但是沒有備份表資料","G"),
 
-    RESTORE("還原","H"),
+    UNZIP("解壓縮","H"),
 //    RESTORE_TABLE_CREATE("創造表並且還原表資料","I"),
 //    RESTORE_TABLE_NO_CREATE("沒有創造表並且還原表資料","J"),
 //    RESTORE_TABLE_NO_DATA("創造表但是沒有還原表資料","K"),
@@ -24,31 +24,19 @@ public enum ActionType {
 //    RESTORE_TABLE_USE_SCHEMA_TABLE_NO_CREATE("使用資料庫沒有創造表也沒有還原表資料","M"),
 //    RESTORE_TABLE_USE_SCHEMA_NO_DATA("使用資料庫創造表但是沒有還原表資料","N"),
 
-    TAR_CXVF("壓縮","O"),
-    MOVE("移動","P"),
-    TAR_ZXVF("解壓縮","Q");
+    MV("移動","O"),
+    TAR("壓縮","P"),
+
 
     private String name;
-    private String value;
 
     ActionType(String name, String value) {
         this.name = name;
-        this.value = value;
+
     }
 
     public String getName() {
         return name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public static String getAllActionType() {
-        String allValue = "";
-        for (ActionType action : ActionType.values()) {
-            allValue += action.getValue();
-        }
-        return allValue;
-    }
 }

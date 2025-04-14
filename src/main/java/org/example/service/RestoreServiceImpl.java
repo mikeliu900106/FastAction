@@ -31,7 +31,7 @@ public class RestoreServiceImpl extends AbstractFileHandle implements BackupRest
     public RestoreServiceImpl getInstace() {
         return INSTANCE;
     }
-    public void pickupFile() {
+    public void execute() {
 
             try {
                 logger.info("Start to restore: " + commands);
@@ -42,7 +42,7 @@ public class RestoreServiceImpl extends AbstractFileHandle implements BackupRest
 
                 // 取得執行結果
                 int exitCode = process.waitFor();
-                logger.info("Command exit code: " + exitCode);
+                logger.info("org.example.model.command.Command exit code: " + exitCode);
 
             } catch (Exception e) {
                 logger.error("Restore failed");
